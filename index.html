@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+</head>
+<style>
+body{
+font-family:sans-serif;
+background-color:lightblue;
+}
+#box{
+	width:50px;
+	height:50px;
+	background:#ff0000;
+	position: absolute;
+	top:150px;
+	left:100px;
+}
+#yourTime{
+color:red;
+font-size:20px;
+}
+h1 ,p, #result{
+	text-align: center;
+}
+p, #result{font-size:1.2em;}
+#result{font-size:1.7em;}
+</style>
+</head>
+<body>
+	<h1>Test your reaction</h1>
+	<p>Click on the shapes that appear as quickly as you can,the shapes will appear in different places randomly.. your average will appear after 10 clicks<br/>
+	the first click will not be counted as you are reading this instructions:)   Now start!!</p>
+<div id="box"></div>
+<div id = yourTime><p> <span id = "seconds"><span></p></div>
+<div id="result"> </div>
+<script type = "text/javascript">
+
+	var box= document.getElementById("box");
+	var yourTime = document.getElementById("yourTime");
+	var seconds = document.getElementById("seconds");
+	var result = document.getElementById("result");
+	var clicked = 0;
+	var createdTime;
+	var duration ;
+	var scores=[];
+	var total =0;
+	var average =0;
+	box.onclick = function (){
+		clickedTime = Date.now();
+		duration = ((clickedTime-createdTime)/1000);
+		box.style.display ="none";
+		var timer = setTimeout(appear,Math.random()*1000);
+		seconds.innerHTML += clicked + "<br/>";
+		clicked++;
+		scores.push(duration);
+		if (clicked==11){
+			box.onclick = null;
+			clearTimeout(timer);
+			scores.shift();
+			for(var i=0;i < scores.length;i++){
+				total += scores[i];
+			}
+			average = total/10;
+			yourTime.removeChild(yourTime.firstChild);
+			result.innerHTML = "Your average is : "+ average + "s.";
+			}
+		};
+	function appear(){
+		createdTime = Date.now();
+		
+		box.style.display = "block";
+		box.style.backgroundColor = randomColor();
+		box.style.top = (Math.floor(Math.random()*350)) +"px";
+		box.style.left= Math.floor(Math.random()*800) +"px";
+		if(Math.random()>0.5){
+		box.style.borderRadius = 50+"%";
+		}else{
+			box.style.borderRadius = 0+"%";
+		}
+		
+		
+	};
+	
+	function randomColor(){
+		var letters = "0123456789ABCDEF".split("");
+		var rand = "#";
+		for(var i = 0;i < 6; i++){
+		rand += letters[Math.round(Math.random()*15)];
+		}
+		return rand;
+	};
+
+</script>
+</body>
+
+</html>
